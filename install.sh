@@ -75,20 +75,3 @@ if [ "$INSTALLED" -eq 0 ]; then
 fi
 
 echo "Done."
-
-# cleanup -- only offer to delete if we're running from the cloned repo directory.
-# compare the git remote repo name to the current directory name to check.
-# skip silently if there's no git remote (e.g., downloaded as a zip).
-REPO_DIR=$(git remote get-url origin 2>/dev/null | sed 's/.*\///' | sed 's/\.git$//')
-BASE_DIR=$(basename "$PWD")
-
-if [ "$INSTALLED" -eq 1 ] && [ -n "$REPO_NAME" ] && [ "$REPO_NAME" = "$CURRENT_DIR" ]; then
-    read -rp $'\nDelete $PWD? [y/n]: ' del
-    case "$del" in
-        y|Y)
-            cd .. && rm -rf "$OLDPWD"
-            echo "Deleted."
-            ;;
-        *) echo "Skipping cleanup." ;;
-    esac
-fi
